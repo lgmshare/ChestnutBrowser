@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">chestnut browser</string>
+    <string name="copy">Copy</string>
+    <string name="share">Share</string>
+    <string name="terms_of_users">Terms of Users</string>
+    <string name="t_new">New</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy_content">The following terms and conditions (the “Terms”) govern your use of the VPN services we provide (the “Service”) and their associated website domains (the “Site”). These Terms constitute a legally binding agreement (the “Agreement”) between you and Tap VPN. (the “Tap VPN”).
+
+Activation of your account constitutes your agreement to be bound by the Terms and a representation that you are at least eighteen (18) years of age, and that the registration information you have provided is accurate and complete.
+
+Tap VPN may update the Terms from time to time without notice. Any changes in the Terms will be incorporated into a revised Agreement that we will post on the Site. Unless otherwise specified, such changes shall be effective when they are posted. If we make material changes to these Terms, we will aim to notify you via email or when you log in at our Site.
+
+By using Tap VPN
+You agree to comply with all applicable laws and regulations in connection with your use of this service.regulations in connection with your use of this service.</string>
+
+
+    <string name="clean_data_tip">Close Tabs and Clear Data</string>
+    <string name="clean_dot">Cleaning…</string>
+    <string name="confirm">Confirm</string>
+    <string name="back">Back</string>
+    <string name="clean_successfully">Clean successfully</string>
+    <string name="copy_successfully">Copy successfully</string>
+    <string name="please_enter_content">Please enter your search content</string>
+</resources>

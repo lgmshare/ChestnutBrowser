@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "416402701717",
+    "project_id": "watchvpn-705aa",
+    "storage_bucket": "watchvpn-705aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416402701717:android:3575b337ed1596118e4a9c",
+        "android_client_info": {
+          "package_name": "com.welcome.browser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "416402701717-5e0i801cfjj7vj81h8o94li0vrmqicgh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmFQI5Y7UyNBf72tOL8SAmAQPOjE7plao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "416402701717-5e0i801cfjj7vj81h8o94li0vrmqicgh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
