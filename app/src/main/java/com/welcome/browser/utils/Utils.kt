@@ -14,5 +14,13 @@ class Utils {
                 }
             }
         }
+
+        fun logE(msg: String?) {
+            if (BuildConfig.DEBUG) {
+                if (!msg.isNullOrEmpty()) {
+                    Log.e("LogHelper", msg)
+                }
+            }
+        }
     }
 }

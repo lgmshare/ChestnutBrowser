@@ -9,6 +9,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.google.android.gms.ads.MobileAds
+import com.welcome.browser.ad.AdManager
+import com.welcome.browser.firebase.FirebaseRemoteConfigUtil
 import com.welcome.browser.ui.WelcomeActivity
 
 class App : Application(), LifecycleEventObserver {
@@ -20,7 +23,10 @@ class App : Application(), LifecycleEventObserver {
     var isFront: Boolean = false
 
     companion object {
+        const val AD_CONFIG = "ewogICAgIm1heFNob3dDb3VudCI6IDMwLAogICAgIm1heENsaWNrQ291bnQiOiAxMCwKICAgICJhZElkcyI6IFsKICAgICAgICB7CiAgICAgICAgICAgICJpZCI6ICJjYS1hcHAtcHViLTM5NDAyNTYwOTk5NDI1NDQvMTAzMzE3MzcxMiIsCiAgICAgICAgICAgICJjYWNoZSI6IDIsCiAgICAgICAgICAgICJwbGF0Zm9ybSI6ICJhZG1vYiIsCiAgICAgICAgICAgICJ0eXBlIjogMiwKICAgICAgICAgICAgImxldmVsIjogNAogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgICAiaWQiOiAiY2EtYXBwLXB1Yi0zOTQwMjU2MDk5OTQyNTQ0LzEwMzMxNzM3MTJ4MyIsCiAgICAgICAgICAgICJjYWNoZSI6IDIsCiAgICAgICAgICAgICJwbGF0Zm9ybSI6ICJhZG1vYiIsCiAgICAgICAgICAgICJ0eXBlIjogMiwKICAgICAgICAgICAgImxldmVsIjogMwogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgICAiaWQiOiAiY2EtYXBwLXB1Yi0zOTQwMjU2MDk5OTQyNTQ0LzEwMzMxNzM3MTJ4MiIsCiAgICAgICAgICAgICJjYWNoZSI6IDIsCiAgICAgICAgICAgICJwbGF0Zm9ybSI6ICJhZG1vYiIsCiAgICAgICAgICAgICJ0eXBlIjogMiwKICAgICAgICAgICAgImxldmVsIjogMgogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgICAiaWQiOiAiY2EtYXBwLXB1Yi0zOTQwMjU2MDk5OTQyNTQ0LzEwMzMxNzM3MTIiLAogICAgICAgICAgICAiY2FjaGUiOiAyLAogICAgICAgICAgICAicGxhdGZvcm0iOiAiYWRtb2IiLAogICAgICAgICAgICAidHlwZSI6IDIsCiAgICAgICAgICAgICJsZXZlbCI6IDMKICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICAgImlkIjogImNhLWFwcC1wdWItMzk0MDI1NjA5OTk0MjU0NC8yMjQ3Njk2MTEweDIiLAogICAgICAgICAgICAiY2FjaGUiOiAxLAogICAgICAgICAgICAicGxhdGZvcm0iOiAiYWRtb2IiLAogICAgICAgICAgICAidHlwZSI6IDEsCiAgICAgICAgICAgICJsZXZlbCI6IDEKICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICAgImlkIjogImNhLWFwcC1wdWItMzk0MDI1NjA5OTk0MjU0NC8yMjQ3Njk2MTEwIiwKICAgICAgICAgICAgImNhY2hlIjogMSwKICAgICAgICAgICAgInBsYXRmb3JtIjogImFkbW9iIiwKICAgICAgICAgICAgInR5cGUiOiAxLAogICAgICAgICAgICAibGV2ZWwiOiA0CiAgICAgICAgfQogICAgXQp9"
+
         lateinit var INSTANCE: App
+
     }
 
     override fun onCreate() {
@@ -62,6 +68,9 @@ class App : Application(), LifecycleEventObserver {
             }
         })
 
+        FirebaseRemoteConfigUtil.init(this)
+
+        AdManager.init(this)
     }
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {

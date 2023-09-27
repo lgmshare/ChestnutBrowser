@@ -16,9 +16,12 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.gms.ads.nativead.NativeAd
 import com.welcome.browser.App
 import com.welcome.browser.BuildConfig
 import com.welcome.browser.R
+import com.welcome.browser.ad.AdManager
+import com.welcome.browser.ad.AdPosition
 import com.welcome.browser.constants.NAV_SITES
 import com.welcome.browser.databinding.CleanDialogBinding
 import com.welcome.browser.databinding.MainActivityBinding
@@ -301,6 +304,7 @@ class MainActivity : BaseActivity<MainActivityBinding>() {
     override fun onStart() {
         super.onStart()
         if (App.INSTANCE.isFront) {
+            AdManager.preload()
             FirebaseEventUtil.event("chest_show")
         }
     }
@@ -311,6 +315,17 @@ class MainActivity : BaseActivity<MainActivityBinding>() {
         menuDialog = null
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!binding.webContainer.isVisible) {
+            lifecycleScope.launchWhenResumed {
+                AdManager.request(AdPosition.HOME)
+                delay(300)
+                AdManager.show(AdPosition.HOME, this@MainActivity, binding.adContainer)
+            }
+        }
+    }
+
     private fun startBrowser(content: String) {
         FirebaseEventUtil.event("chest_newSearch")
         binding.searchView.hideSoftInput()
@@ -319,10 +334,25 @@ class MainActivity : BaseActivity<MainActivityBinding>() {
         WebManagers.currentWebLinks.webView.startLoad(content)
     }
 
-    private fun setWebViewVisible(isVisible: Boolean, webLinks: WebLink? = null) {
+    private fun setWebViewVisible(isVisible: Boolean) {
         binding.webContainer.isVisible = isVisible
-        if (!isVisible) {
+        if (isVisible) {
+            //销毁广告
+            val ad = binding.adContainer.getTag(R.id.native_ad_id)
+            if (ad is NativeAd) {
+                Utils.log("销毁广告")
+                ad.destroy()
+            }
+            binding.adContainer.setTag(R.id.native_ad_id, null)
+            binding.adContainer.removeAllViews()
+            binding.adContainer.isVisible = false
+        } else {
             binding.webContainer.removeAllViews()
+            lifecycleScope.launchWhenResumed {
+                AdManager.request(AdPosition.HOME)
+                delay(300)
+                AdManager.show(AdPosition.HOME, this@MainActivity, binding.adContainer)
+            }
         }
     }
 

@@ -67,10 +67,13 @@ dependencies {
     implementation("com.google.android:flexbox:2.0.1")
     implementation("com.google.android.material:material:1.8.0")
 
+    implementation("com.google.code.gson:gson:2.10.1")
+
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
     implementation("com.google.firebase:firebase-config-ktx:21.4.1")
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-crashlytics:18.4.0")
+    implementation("com.google.android.gms:play-services-ads:22.1.0")
 
 
 }

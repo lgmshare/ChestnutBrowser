@@ -3,6 +3,8 @@ package com.welcome.browser.ui
 import android.content.Intent
 import androidx.lifecycle.lifecycleScope
 import com.welcome.browser.App
+import com.welcome.browser.ad.AdManager
+import com.welcome.browser.ad.AdPosition
 import com.welcome.browser.databinding.WelcomeActivityBinding
 import com.welcome.browser.firebase.FirebaseEventUtil
 import com.welcome.browser.ui.base.BaseActivity
@@ -43,30 +45,46 @@ class WelcomeActivity : BaseActivity<WelcomeActivityBinding>() {
         Utils.log("firebase属性:country=${SharePrefUtils.country}")
         FirebaseEventUtil.setProperty(SharePrefUtils.country)
 
+        AdManager.preload()
+
         binding.progressCircular.progress = 0
         job = lifecycleScope.launch {
             kotlin.runCatching {
                 withTimeoutOrNull(14000) {
                     launch {
-                        delay(3000)
+                        delay(2800)
                     }
                     launch {
                         var progress = 0
-                        while (isActive && progress <= 100) {
+                        while (isActive && progress <= 60) {
                             binding.progressCircular.progress = progress
                             progress++
-                            delay(30)
+                            delay(47)
                         }
+                    }
+                    launch {
+                        //加载广告
+                        AdManager.request(AdPosition.LOADING)?.join()
                     }
                 }
             }.onSuccess {
-                if (App.INSTANCE.isFront) {
-                    if (App.INSTANCE.activityCount == 1) {
-                        createNewWebTab()
-                        startActivity(Intent(this@WelcomeActivity, MainActivity::class.java))
-                    }
+                var progress = 60
+                while (progress <= 100) {
+                    binding.progressCircular.progress = progress
+                    progress++
+                    delay(25)
                 }
-                finish()
+
+                //展示广告
+                AdManager.show(AdPosition.LOADING, this@WelcomeActivity) {
+                    if (App.INSTANCE.isFront) {
+                        if (App.INSTANCE.activityCount == 1) {
+                            createNewWebTab()
+                            startActivity(Intent(this@WelcomeActivity, MainActivity::class.java))
+                        }
+                    }
+                    finish()
+                }
             }.onFailure {
 
             }

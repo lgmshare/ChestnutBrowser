@@ -1,6 +1,10 @@
 package com.welcome.browser.ui.tabs
 
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.welcome.browser.ad.AdManager
+import com.welcome.browser.ad.AdPosition
 import com.welcome.browser.databinding.WebLinksActivityBinding
 import com.welcome.browser.extensions.setOnClick
 import com.welcome.browser.firebase.FirebaseEventUtil
@@ -8,6 +12,7 @@ import com.welcome.browser.model.WebLink
 import com.welcome.browser.ui.adapter.WebLinkAdapter
 import com.welcome.browser.ui.base.BaseActivity
 import com.welcome.browser.web.WebManagers
+import kotlinx.coroutines.delay
 
 class WebLinksActivity : BaseActivity<WebLinksActivityBinding>() {
 
@@ -67,4 +72,12 @@ class WebLinksActivity : BaseActivity<WebLinksActivityBinding>() {
         adapter.dataList.addAll(list)
     }
 
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launchWhenResumed {
+            AdManager.request(AdPosition.TAP)
+            delay(300)
+            AdManager.show(AdPosition.TAP, this@WebLinksActivity, binding.adContainer)
+        }
+    }
 }

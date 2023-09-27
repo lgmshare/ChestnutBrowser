@@ -3,6 +3,8 @@ package com.welcome.browser.ui
 import android.webkit.CookieManager
 import androidx.lifecycle.lifecycleScope
 import com.welcome.browser.R
+import com.welcome.browser.ad.AdManager
+import com.welcome.browser.ad.AdPosition
 import com.welcome.browser.databinding.CleanActivityBinding
 import com.welcome.browser.extensions.toast
 import com.welcome.browser.firebase.FirebaseEventUtil
@@ -10,6 +12,7 @@ import com.welcome.browser.ui.base.BaseActivity
 import com.welcome.browser.web.WebManagers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 
@@ -40,18 +43,22 @@ class CleanActivity : BaseActivity<CleanActivityBinding>() {
                     }
 
                     launch {
-                        delay(3000)
-                        toast(R.string.clean_successfully)
-                        FirebaseEventUtil.cleanEvent((System.currentTimeMillis() - startTime) / 1000)
+                        AdManager.request(AdPosition.CLEAN)?.join()
                     }
+
                     launch {
-                        delay(5000)
+                        delay(2800)
+                        FirebaseEventUtil.cleanEvent((System.currentTimeMillis() - startTime) / 1000)
                     }
                 }
             }.onSuccess {
+                toast(R.string.clean_successfully)
                 FirebaseEventUtil.event("chest_clean_end")
-                finish()
+                AdManager.show(AdPosition.CLEAN, this@CleanActivity) {
+                    finish()
+                }
             }.onFailure {
+                finish()
             }
         }
     }
