@@ -23,4 +23,7 @@ You agree to comply with all applicable laws and regulations in connection with 
     <string name="clean_successfully">Clean successfully</string>
     <string name="copy_successfully">Copy successfully</string>
     <string name="please_enter_content">Please enter your search content</string>
+
+    <string name="facebook_app_id">1234</string>
+    <string name="facebook_client_token">56789</string>
 </resources>

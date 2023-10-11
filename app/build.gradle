@@ -13,8 +13,8 @@ android {
         applicationId "com.welcome.browser"
         minSdk 24
         targetSdk 33
-        versionCode 5
-        versionName "1.0.0"
+        versionCode 8
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -68,6 +68,8 @@ dependencies {
     implementation("com.google.android.material:material:1.8.0")
 
     implementation("com.google.code.gson:gson:2.10.1")
+    //
+    implementation("com.facebook.android:facebook-android-sdk:latest.release")
 
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
     implementation("com.google.firebase:firebase-config-ktx:21.4.1")

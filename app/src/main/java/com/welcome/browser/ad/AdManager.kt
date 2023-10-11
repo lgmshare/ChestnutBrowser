@@ -40,6 +40,7 @@ object AdManager {
     private var showCount = 0 //应用级每日广告展示次数上限
     private var clickCount = 0 //应用级每日点击次数上限
     private var homeNativeAdShowTime: Long = 0
+    private var tabNativeAdShowTime: Long = 0
 
     /**
      * 缓存池
@@ -49,18 +50,17 @@ object AdManager {
 
     fun init(context: Context) {
         MobileAds.initialize(context)
-
-        val showCount = SharePrefUtils.adShowCount
-        val clickCount = SharePrefUtils.adClickCount
         val date = SharePrefUtils.adDataDate
-
         val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
         val today = dateFormat.format(Calendar.getInstance().time)
+        Utils.log("$date  $today")
         if (date == today) {
+            val showCount = SharePrefUtils.adShowCount
+            val clickCount = SharePrefUtils.adClickCount
             setShowAndClick(showCount, clickCount)
         } else {
             setShowAndClick(0, 0)
-            SharePrefUtils.adDataDate = date
+            SharePrefUtils.adDataDate = today
             SharePrefUtils.adClickCount = 0
             SharePrefUtils.adShowCount = 0
         }
@@ -184,7 +184,11 @@ object AdManager {
                             Utils.logE("HOME 页面展示广告时间小于10s")
                         }
                     } else {
-                        showNative(adPosition, activity, adContainer)
+                        if (System.currentTimeMillis() - tabNativeAdShowTime >= 10 * 1000L) {
+                            showNative(adPosition, activity, adContainer)
+                        } else {
+                            Utils.logE("HOME 页面展示广告时间小于10s")
+                        }
                     }
                 }
             }
@@ -237,6 +241,7 @@ object AdManager {
                 Utils.log("展示原生广告")
                 when (adPosition) {
                     AdPosition.TAP -> {
+                        tabNativeAdShowTime = System.currentTimeMillis()
                         val adBinding = LayoutAdBinding.inflate(activity.layoutInflater)
                         showNativeAdView(ad, adBinding)
                         adBinding

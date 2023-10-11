@@ -3,6 +3,7 @@ package com.welcome.browser.ui.base
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
+import com.welcome.browser.App
 import com.welcome.browser.model.WebLink
 import com.welcome.browser.views.ChestnutWeb
 import com.welcome.browser.web.WebManagers
@@ -20,9 +21,15 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         binding = onbBuildVB()
         setContentView(binding.root)
         onCreatePage()
+        App.INSTANCE.activityCount++
     }
 
     fun createNewWebTab() {
         WebManagers.addWeb(WebLink("", null, WebManagers.getMaxWeb() + 1, ChestnutWeb()))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        App.INSTANCE.activityCount--
     }
 }
