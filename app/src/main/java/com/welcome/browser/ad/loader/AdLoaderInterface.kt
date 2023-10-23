@@ -7,6 +7,8 @@ interface AdLoaderInterface {
 
     suspend fun loadNative(adId: AdId): AdData<*>
 
+    suspend fun loadAppOpenAd(adId: AdId): AdData<*>
+
     suspend fun loadInterstitial(adId: AdId): AdData<*>
 
 }

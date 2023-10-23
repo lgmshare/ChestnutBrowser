@@ -4,6 +4,7 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.welcome.browser.App
@@ -34,6 +35,22 @@ class AdmobLoader : AdLoaderInterface {
                     AdManager.onAdClick(AdPosition.HOME)
                 }
             }).build().loadAd(AdRequest.Builder().build())
+        }
+    }
+
+    override suspend fun loadAppOpenAd(adId: AdId): AdData<*> {
+        return suspendCancellableCoroutine { callback ->
+            val request = AdRequest.Builder().build()
+            AppOpenAd.load(App.INSTANCE, adId.id, request, AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,
+                object : AppOpenAd.AppOpenAdLoadCallback() {
+                    override fun onAdLoaded(ad: AppOpenAd) {
+                        callback.resume(AdData(adId, ad, true, null, null)) {}
+                    }
+
+                    override fun onAdFailedToLoad(adError: LoadAdError) {
+                        callback.resume(AdData(adId, null, false, adError.code, adError.message)) {}
+                    }
+                })
         }
     }
 

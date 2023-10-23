@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -149,6 +150,7 @@ object AdManager {
                     val adData = when (id.type) {
                         AdType.INTERSTITIAL -> loader.loadInterstitial(id)
                         AdType.NATIVE -> loader.loadNative(id)
+                        AdType.OPEN -> loader.loadAppOpenAd(id)
                         else -> AdData(id, null, false, AdCode.NOT_SUPPORT_AD_TYPE, null)
                     }
                     if (adData.success && adData.ad != null) {
@@ -172,7 +174,10 @@ object AdManager {
         if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
             Utils.log("页面展示广告")
             when (adPosition) {
-                AdPosition.LOADING, AdPosition.CLEAN -> {
+                AdPosition.LOADING -> {
+                    showOpen(adPosition, activity, onClose)
+                }
+                AdPosition.CLEAN -> {
                     showInterstitial(adPosition, activity, onClose)
                 }
 
@@ -195,6 +200,42 @@ object AdManager {
         } else {
             Utils.log("页面不可见无法展示")
             onClose?.invoke()
+        }
+    }
+
+    private fun showOpen(adPosition: AdPosition, activity: AppCompatActivity, onClose: (() -> Unit)? = null) {
+        val adData = get(adPosition)
+        when (val ad = adData?.ad) {
+            is AppOpenAd -> {
+                Utils.log("展示开屏广告")
+                onAdShow(adPosition)
+                ad.fullScreenContentCallback = object : FullScreenContentCallback() {
+
+                    override fun onAdClicked() {
+                        onAdClick(adPosition)
+                    }
+
+                    override fun onAdDismissedFullScreenContent() {
+                        onClose?.invoke()
+                    }
+
+                    override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                        onClose?.invoke()
+                    }
+
+                    override fun onAdImpression() {
+                        onImpression(adPosition)
+                    }
+
+                    override fun onAdShowedFullScreenContent() {
+                    }
+                }
+                ad.show(activity)
+            }
+
+            else -> {
+                onClose?.invoke()
+            }
         }
     }
 

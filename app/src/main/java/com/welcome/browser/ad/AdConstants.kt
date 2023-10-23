@@ -26,5 +26,6 @@ interface AdType {
     companion object {
         const val NATIVE = 1 //原生广告
         const val INTERSTITIAL = 2 // 插屏广告
+        const val OPEN = 3 //
     }
 }
